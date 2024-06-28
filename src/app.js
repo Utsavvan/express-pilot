@@ -15,7 +15,7 @@ const { MONGO_URL } = require("@Services/mongo");
 
 const app = express();
 
-// Defined variables and configs
+/******** Defined variables and configs ********/
 // Define the log file path
 const logFilePath = path.join(__dirname, "logs", "access.log");
 
@@ -104,6 +104,9 @@ const mainRouter = express.Router();
 
 // set main router for whole app
 app.use("/api", mainRouter);
+
+/************ App routers ************/
+// define api routes here
 
 // express endpoint for front end react app
 app.get("*", (req, res) => {
