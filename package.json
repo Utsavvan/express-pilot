@@ -1,4 +1,7 @@
 {
+  "bin": {
+    "nodeartisan": ".modules/ExpressCLI/index.js"
+  },
   "scripts": {
     "start": "node --env-file=.env src/server.js",
     "watch": "nodemon --env-file=.env src/server.js"
