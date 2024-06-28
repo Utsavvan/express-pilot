@@ -1,0 +1,26 @@
+{
+  "scripts": {
+    "start": "node --env-file=.env src/server.js",
+    "watch": "nodemon --env-file=.env src/server.js"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "module-alias": "^2.2.3",
+    "mongoose": "^8.4.4",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.4",
+    "winston": "^3.13.0"
+  },
+  "_moduleAliases": {
+    "@Root": ".",
+    "@Src": "./src",
+    "@Modules": "./src/modules",
+    "@Models": "./src/models",
+    "@Routes": "./src/routes",
+    "@Config": "./src/config",
+    "@Services": "./src/services"
+  }
+}
