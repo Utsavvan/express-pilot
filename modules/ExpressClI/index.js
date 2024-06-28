@@ -4,7 +4,7 @@ const { Command } = require("commander");
 const fs = require("fs");
 const path = require("path");
 
-class ExpressClI {
+class ExpressCLI {
   constructor() {
     this.program = new Command();
     this.init();
@@ -46,4 +46,4 @@ class ExpressClI {
   }
 }
 
-module.exports = CLI;
+module.exports = ExpressCLI;

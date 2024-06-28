@@ -1,7 +1,8 @@
-const app = require("./app.js");
 const http = require("http");
 const process = require("node:process");
+
 require("module-alias/register");
+const app = require("./app.js");
 
 const { mongoConnect } = require("@Services/mongo");
 

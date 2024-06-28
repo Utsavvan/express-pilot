@@ -15,7 +15,10 @@ mongoose.connection.once("error", (err) => {
 
 async function mongoConnect(customMongoURL = null) {
   const urlToUse = customMongoURL || MONGO_URL;
-  await mongoose.connect(urlToUse);
+
+  if (urlToUse) {
+    await mongoose.connect(urlToUse);
+  }
 }
 
 async function mongoDisconnect() {
@@ -25,4 +28,5 @@ async function mongoDisconnect() {
 module.exports = {
   mongoConnect,
   mongoDisconnect,
+  MONGO_URL,
 };
