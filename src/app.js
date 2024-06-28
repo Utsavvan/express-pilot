@@ -7,6 +7,11 @@ const helmet = require("helmet");
 const cors = require("cors");
 const winston = require("winston");
 
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
+const { MONGO_URL } = require("@Services/mongo");
+
 const app = express();
 
 // Defined variables and configs
@@ -26,6 +31,24 @@ const logger = winston.createLogger({
   ],
 });
 
+let sessionConfig = {
+  name: "SESS_NAME",
+  secret: process?.env?.COOKIE_KEY || "secret",
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: false,
+    secure: false,
+    httpOnly: true,
+  },
+  resave: false,
+  saveUninitialized: false,
+  store: MONGO_URL
+    ? MongoStore.create({
+        mongoUrl: MONGO_URL,
+      })
+    : "",
+};
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));
@@ -34,6 +57,8 @@ app.use(morgan("common", { stream: accessLogStream }));
 app.use(morgan("common"));
 app.use(helmet());
 app.use(cors());
+
+app.use(session(sessionConfig));
 
 // A middleware to capture logs from controllers and direct them to Winston
 app.use((req, res, next) => {
