@@ -9,6 +9,7 @@ const winston = require("winston");
 
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const { expressCspHeader, SELF } = require("express-csp-header");
 
 const { MONGO_URL } = require("@Services/mongo");
 
@@ -49,6 +50,31 @@ let sessionConfig = {
     : "",
 };
 
+let corsOptions = {
+  credentials: true,
+  methods: [
+    "GET",
+    "HEAD",
+    "POST",
+    "PUT",
+    "DELETE",
+    "TRACE",
+    "OPTIONS",
+    "PATCH",
+  ],
+  origin: ["http://localhost:3001", "http://localhost:1234"],
+};
+
+let cspOptions = {
+  policies: {
+    "default-src": [
+      SELF,
+      // Add a allowed domains
+    ],
+    "connect-src": [SELF],
+  },
+};
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "public")));
@@ -56,7 +82,8 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(morgan("common", { stream: accessLogStream }));
 app.use(morgan("common"));
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(expressCspHeader(cspOptions));
 
 app.use(session(sessionConfig));
 
