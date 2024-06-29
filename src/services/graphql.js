@@ -7,11 +7,6 @@ const { corsOptions } = require("@Config/helperVariables");
 async function startApolloServer() {
   const graphqlServer = new ApolloServer({
     schema: graphqlSchema,
-    context: ({ req }) => {
-      // Extract the session cookie and add it to the context
-      const location = req.cookies.location || "";
-      return { location };
-    },
     cors: corsOptions,
     playground: process.env.NODE_ENV === "development" ? true : false,
     introspection: true,
