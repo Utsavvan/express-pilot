@@ -40,15 +40,15 @@ app.use(expressCspHeader(cspOptions));
 
 app.use(session(sessionConfig));
 
-/************ Custom moddlewares ************/
-
-app.use(errorMiddleware);
 // A middleware to capture logs from controllers and direct them to Winston
 app.use(loggerMiddleware);
 
 // set main router for whole app
 const mainRouter = express.Router();
 app.use("/api", mainRouter);
+
+// capture a errors
+app.use(errorMiddleware);
 
 /************ App routers ************/
 // define api routes here

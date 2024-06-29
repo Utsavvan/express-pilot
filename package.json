@@ -39,6 +39,7 @@
     "@Routes": "./src/routes",
     "@Config": "./src/config",
     "@Services": "./src/services",
-    "@Schema": "./src/schema"
+    "@Schema": "./src/schema",
+    "@Middlewares": "./src/middlewares"
   }
 }
