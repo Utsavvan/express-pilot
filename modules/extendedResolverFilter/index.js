@@ -13,8 +13,6 @@ function extendedResolverFilter(
     query: (query, value, resolveParams) => {
       const filter = value;
 
-      const { model } = resolveParams;
-
       Object.entries(filter).forEach(([key, value]) => {
         applyFilterBasedOnType(query, key, value, schema);
       });
