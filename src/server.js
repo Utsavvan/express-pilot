@@ -1,5 +1,6 @@
 const http = require("http");
 const process = require("node:process");
+const path = require("path");
 
 require("module-alias/register");
 const app = require("./app.js");

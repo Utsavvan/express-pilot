@@ -1,24 +1,25 @@
-const fs = require("fs");
 const path = require("path");
 
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-const winston = require("winston");
 
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
 const { expressCspHeader } = require("express-csp-header");
+
 const {
   isDevelopment,
   cspOptions,
   corsOptions,
   sessionConfig,
-
-  logger,
   accessLogStream,
 } = require("@Config/helperVariables");
+
+const errorMiddleware = require("@Middlewares/errors.middleware");
+const loggerMiddleware = require("@Middlewares/logger.middleware");
+
+const exampleRouter = require("@Routes/example/example.routes.js");
 
 const app = express();
 
@@ -40,24 +41,18 @@ app.use(expressCspHeader(cspOptions));
 app.use(session(sessionConfig));
 
 // A middleware to capture logs from controllers and direct them to Winston
-app.use((req, res, next) => {
-  const originalConsoleLog = console.log;
-
-  // Override console.log to capture logs
-  console.log = function (...args) {
-    logger.info(args.join(" "));
-    originalConsoleLog.apply(console, args);
-  };
-
-  next();
-});
-
-const mainRouter = express.Router();
+app.use(loggerMiddleware);
 
 // set main router for whole app
+const mainRouter = express.Router();
 app.use("/api", mainRouter);
+
+// capture a errors
+app.use(errorMiddleware);
 
 /************ App routers ************/
 // define api routes here
+
+mainRouter.use("/example", exampleRouter);
 
 module.exports = app;
