@@ -3,3 +3,7 @@
 /src/logs
 /documents
 /debug
+
+# graphql
+**/schema.graphql.json
+**/schema.graphql.txt

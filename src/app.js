@@ -1,30 +1,27 @@
-const fs = require("fs");
 const path = require("path");
 
 const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-const winston = require("winston");
+
+const session = require("express-session");
+const { expressCspHeader } = require("express-csp-header");
+
+const {
+  isDevelopment,
+  cspOptions,
+  corsOptions,
+  sessionConfig,
+  accessLogStream,
+} = require("@Config/helperVariables");
+
+const errorMiddleware = require("@Middlewares/errors.middleware");
+const loggerMiddleware = require("@Middlewares/logger.middleware");
+
+const exampleRouter = require("@Routes/example/example.routes.js");
 
 const app = express();
-
-// Defined variables and configs
-// Define the log file path
-const logFilePath = path.join(__dirname, "logs", "access.log");
-
-// Create a write stream (in append mode) for the log file
-const accessLogStream = fs.createWriteStream(logFilePath, { flags: "a" });
-
-// Setup Winston logger
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.simple(),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: logFilePath }),
-  ],
-});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -32,30 +29,30 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.use(morgan("common", { stream: accessLogStream }));
 app.use(morgan("common"));
-app.use(helmet());
-app.use(cors());
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: !isDevelopment,
+    contentSecurityPolicy: !isDevelopment,
+  })
+);
+app.use(cors(corsOptions));
+app.use(expressCspHeader(cspOptions));
+
+app.use(session(sessionConfig));
 
 // A middleware to capture logs from controllers and direct them to Winston
-app.use((req, res, next) => {
-  const originalConsoleLog = console.log;
-
-  // Override console.log to capture logs
-  console.log = function (...args) {
-    logger.info(args.join(" "));
-    originalConsoleLog.apply(console, args);
-  };
-
-  next();
-});
-
-const mainRouter = express.Router();
+app.use(loggerMiddleware);
 
 // set main router for whole app
+const mainRouter = express.Router();
 app.use("/api", mainRouter);
 
-// express endpoint for front end react app
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
-});
+// capture a errors
+app.use(errorMiddleware);
+
+/************ App routers ************/
+// define api routes here
+
+mainRouter.use("/example", exampleRouter);
 
 module.exports = app;
