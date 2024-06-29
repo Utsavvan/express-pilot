@@ -21,7 +21,11 @@ let corsOptions = {
     "OPTIONS",
     "PATCH",
   ],
-  origin: ["http://localhost:3001", "http://localhost:1234"],
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:1234",
+    "https://studio.apollographql.com",
+  ],
 };
 
 const config = {
@@ -52,6 +56,8 @@ let cspOptions = {
     "default-src": [
       SELF,
       // Add a allowed domains
+      "http://localhost:3000",
+      "studio.apollographql.com",
     ],
     "connect-src": [SELF],
   },
