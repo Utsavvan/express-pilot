@@ -60,9 +60,4 @@ app.use("/api", mainRouter);
 /************ App routers ************/
 // define api routes here
 
-// express endpoint for front end react app
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
-});
-
 module.exports = app;

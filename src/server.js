@@ -11,14 +11,19 @@ const buildSchema = require("./scripts/graphqlBuildSchema.js");
 
 const PORT = process.env.PORT || 3001;
 
-const server = http.createServer(app);
-
 async function startServer() {
   await mongoConnect();
 
   await buildSchema();
 
   await startApolloServer();
+
+  const server = http.createServer(app);
+
+  // express endpoint for front end
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+  });
 
   server.listen(PORT, () => {
     console.log(`App listning on PORT http://localhost:${PORT}`);

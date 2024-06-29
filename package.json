@@ -34,7 +34,7 @@
   "_moduleAliases": {
     "@Root": ".",
     "@Src": "./src",
-    "@Modules": "./src/modules",
+    "@Modules": "./modules",
     "@Models": "./src/models",
     "@Routes": "./src/routes",
     "@Config": "./src/config",
