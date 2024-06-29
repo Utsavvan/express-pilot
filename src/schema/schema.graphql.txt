@@ -1,0 +1,488 @@
+type Query {
+  exampleById(_id: MongoID!): example
+  exampleByIds(_ids: [MongoID!]!, limit: Int = 100, sort: SortFindByIdsexampleInput): [example!]!
+  exampleOne(
+    """Filter by fields"""
+    filter: FilterFindOneexampleInput
+    skip: Int
+    sort: SortFindOneexampleInput
+  ): example
+  exampleMany(
+    """Filter by fields"""
+    filter: FilterFindManyexampleInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyexampleInput
+  ): [example!]!
+  exampleCount(
+    """Filter by fields"""
+    filter: FilterCountexampleInput
+  ): Int
+  examplePagination(
+    """Page number for displaying"""
+    page: Int
+
+    """"""
+    perPage: Int = 20
+
+    """Filter by fields"""
+    filter: FilterFindManyexampleInput
+    sort: SortFindManyexampleInput
+  ): examplePagination
+}
+
+type example {
+  testField: String
+  _id: MongoID!
+}
+
+"""
+The `ID` scalar type represents a unique MongoDB identifier in collection. MongoDB by default use 12-byte ObjectId value (https://docs.mongodb.com/manual/reference/bson-types/#objectid). But MongoDB also may accepts string or integer as correct values for _id field.
+"""
+scalar MongoID
+
+enum SortFindByIdsexampleInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+""""""
+input FilterFindOneexampleInput {
+  testField: String
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneexampleOperatorsInput
+  OR: [FilterFindOneexampleInput!]
+  AND: [FilterFindOneexampleInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindOneexampleOperatorsInput {
+  _id: FilterFindOneexample_idOperatorsInput
+}
+
+input FilterFindOneexample_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+enum SortFindOneexampleInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+""""""
+input FilterFindManyexampleInput {
+  testField: String
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindManyexampleOperatorsInput
+  OR: [FilterFindManyexampleInput!]
+  AND: [FilterFindManyexampleInput!]
+
+  """
+  Perform a LIKE operation on relevant fields. Supports multiple values in an array for AND operation.
+  """
+  filter: JSON
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindManyexampleOperatorsInput {
+  _id: FilterFindManyexample_idOperatorsInput
+}
+
+input FilterFindManyexample_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+enum SortFindManyexampleInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+""""""
+input FilterCountexampleInput {
+  testField: String
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterCountexampleOperatorsInput
+  OR: [FilterCountexampleInput!]
+  AND: [FilterCountexampleInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterCountexampleOperatorsInput {
+  _id: FilterCountexample_idOperatorsInput
+}
+
+input FilterCountexample_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+"""List of items with pagination."""
+type examplePagination {
+  """Total object count."""
+  count: Int
+
+  """Array of objects."""
+  items: [example!]
+
+  """Information to aid in pagination."""
+  pageInfo: PaginationInfo!
+}
+
+type PaginationInfo {
+  currentPage: Int!
+  perPage: Int!
+  pageCount: Int
+  itemCount: Int
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+}
+
+type Mutation {
+  """
+  Create one document with mongoose defaults, setters, hooks and validation
+  """
+  exampleCreateOne(record: CreateOneexampleInput!): CreateOneexamplePayload
+
+  """
+  Creates Many documents with mongoose defaults, setters, hooks and validation
+  """
+  exampleCreateMany(records: [CreateManyexampleInput!]!): CreateManyexamplePayload
+
+  """
+  Update one document: 1) Retrieve one document by findById. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
+  """
+  exampleUpdateById(_id: MongoID!, record: UpdateByIdexampleInput!): UpdateByIdexamplePayload
+
+  """
+  Update one document: 1) Retrieve one document via findOne. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
+  """
+  exampleUpdateOne(
+    record: UpdateOneexampleInput!
+
+    """Filter by fields"""
+    filter: FilterUpdateOneexampleInput
+    sort: SortUpdateOneexampleInput
+    skip: Int
+  ): UpdateOneexamplePayload
+
+  """
+  Update many documents without returning them: Use Query.update mongoose method. Do not apply mongoose defaults, setters, hooks and validation. 
+  """
+  exampleUpdateMany(
+    record: UpdateManyexampleInput!
+
+    """Filter by fields"""
+    filter: FilterUpdateManyexampleInput
+    sort: SortUpdateManyexampleInput
+    skip: Int
+    limit: Int = 100
+  ): UpdateManyexamplePayload
+
+  """
+  Remove one document: 1) Retrieve one document and remove with hooks via findByIdAndRemove. 2) Return removed document.
+  """
+  exampleRemoveById(_id: MongoID!): RemoveByIdexamplePayload
+
+  """
+  Remove one document: 1) Remove with hooks via findOneAndRemove. 2) Return removed document.
+  """
+  exampleRemoveOne(
+    """Filter by fields"""
+    filter: FilterRemoveOneexampleInput
+    sort: SortRemoveOneexampleInput
+  ): RemoveOneexamplePayload
+
+  """
+  Remove many documents without returning them: Use Query.remove mongoose method. Do not apply mongoose defaults, setters, hooks and validation. 
+  """
+  exampleRemoveMany(
+    """Filter by fields"""
+    filter: FilterRemoveManyexampleInput!
+    limit: Int = 100
+  ): RemoveManyexamplePayload
+}
+
+type CreateOneexamplePayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Created document"""
+  record: example
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+interface ErrorInterface {
+  """Generic error message"""
+  message: String
+}
+
+""""""
+input CreateOneexampleInput {
+  testField: String
+}
+
+type CreateManyexamplePayload {
+  """Documents IDs"""
+  recordIds: [MongoID!]!
+
+  """Created documents"""
+  records: [example!]
+
+  """Number of created documents"""
+  createdCount: Int!
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+""""""
+input CreateManyexampleInput {
+  testField: String
+}
+
+type UpdateByIdexamplePayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Updated document"""
+  record: example
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+""""""
+input UpdateByIdexampleInput {
+  testField: String
+}
+
+type UpdateOneexamplePayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Updated document"""
+  record: example
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+""""""
+input UpdateOneexampleInput {
+  testField: String
+}
+
+""""""
+input FilterUpdateOneexampleInput {
+  testField: String
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterUpdateOneexampleOperatorsInput
+  OR: [FilterUpdateOneexampleInput!]
+  AND: [FilterUpdateOneexampleInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterUpdateOneexampleOperatorsInput {
+  _id: FilterUpdateOneexample_idOperatorsInput
+}
+
+input FilterUpdateOneexample_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+enum SortUpdateOneexampleInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+type UpdateManyexamplePayload {
+  """Affected documents number"""
+  numAffected: Int
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+""""""
+input UpdateManyexampleInput {
+  testField: String
+}
+
+""""""
+input FilterUpdateManyexampleInput {
+  testField: String
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterUpdateManyexampleOperatorsInput
+  OR: [FilterUpdateManyexampleInput!]
+  AND: [FilterUpdateManyexampleInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterUpdateManyexampleOperatorsInput {
+  _id: FilterUpdateManyexample_idOperatorsInput
+}
+
+input FilterUpdateManyexample_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+enum SortUpdateManyexampleInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+type RemoveByIdexamplePayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Removed document"""
+  record: example
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+type RemoveOneexamplePayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Removed document"""
+  record: example
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+""""""
+input FilterRemoveOneexampleInput {
+  testField: String
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterRemoveOneexampleOperatorsInput
+  OR: [FilterRemoveOneexampleInput!]
+  AND: [FilterRemoveOneexampleInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterRemoveOneexampleOperatorsInput {
+  _id: FilterRemoveOneexample_idOperatorsInput
+}
+
+input FilterRemoveOneexample_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+enum SortRemoveOneexampleInput {
+  _ID_ASC
+  _ID_DESC
+}
+
+type RemoveManyexamplePayload {
+  """Affected documents number"""
+  numAffected: Int
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+""""""
+input FilterRemoveManyexampleInput {
+  testField: String
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterRemoveManyexampleOperatorsInput
+  OR: [FilterRemoveManyexampleInput!]
+  AND: [FilterRemoveManyexampleInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterRemoveManyexampleOperatorsInput {
+  _id: FilterRemoveManyexample_idOperatorsInput
+}
+
+input FilterRemoveManyexample_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
