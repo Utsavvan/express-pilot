@@ -16,17 +16,31 @@ class ExpressCLI {
       .description("Custom CLI for Express.js Application");
 
     this.program
-      .command("createModel <modelFilename> <tableName>")
+      .command("createModel <modelName> <tableName>")
       .description("Create a new model file")
       .action(this.createModel.bind(this));
 
     this.program.parse(process.argv);
   }
 
-  createModel(modelFilename, tableName) {
-    const modelsDir = path.resolve(__dirname, "../src/models");
-    const filePath = path.join(modelsDir, `${modelFilename}.model.js`);
-    const templatePath = path.resolve(__dirname, "templates/modelTemplate.js");
+  createModel(modelName, tableName) {
+    const fileName = modelName.toLowerCase();
+    const modelsDir = path.resolve(
+      __dirname,
+      "..",
+      "..",
+      "src",
+      "models",
+      `${fileName}`
+    );
+
+    const filePath = path.join(modelsDir, `${fileName}.model.js`);
+
+    const templatePath = path.resolve(
+      __dirname,
+      "templates",
+      "modelTemplate.js"
+    );
 
     fs.readFile(templatePath, "utf8", (err, data) => {
       if (err) {
@@ -34,7 +48,7 @@ class ExpressCLI {
       }
 
       const modelContent = data
-        .replace(/{{modelName}}/g, modelFilename)
+        .replace(/{{modelName}}/g, modelName)
         .replace(/{{tableName}}/g, tableName);
 
       fs.mkdirSync(modelsDir, { recursive: true });
@@ -44,6 +58,10 @@ class ExpressCLI {
       console.log(`Model file created: ${filePath}`);
     });
   }
+}
+
+if (require.main === module && process.argv.length > 2) {
+  new ExpressCLI();
 }
 
 module.exports = ExpressCLI;
