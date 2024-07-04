@@ -4,7 +4,8 @@
   },
   "scripts": {
     "start": "node --env-file=.env src/server.js",
-    "watch": "nodemon --env-file=.env src/server.js"
+    "watch": "nodemon --env-file=.env src/server.js",
+    "artisan": "node modules/ExpressCLI/index.js"
   },
   "nodemonConfig": {
     "ignore": [
