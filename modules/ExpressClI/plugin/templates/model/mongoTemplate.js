@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+{{graphqlComposeImport}}
 
 const {{modelName}}Schema = new mongoose.Schema({
   // Define your schema here
@@ -6,4 +7,6 @@ const {{modelName}}Schema = new mongoose.Schema({
 
 const {{modelName}} = mongoose.model('{{tableName}}', {{modelName}}Schema)
 
-module.exports = {{modelName}};
+{{graphqlCompose}}
+
+module.exports = {{exportDetails}};
