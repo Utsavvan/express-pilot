@@ -1,4 +1,4 @@
-const ExpressCLI = require("expresscli");
+const ExpressCLI = require("@utsavvan/expresscli");
 
 const { createModelCommand } = require("./plugin");
 
