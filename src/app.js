@@ -7,6 +7,7 @@ const cors = require("cors");
 
 const session = require("express-session");
 const { expressCspHeader } = require("express-csp-header");
+const passport = require("passport");
 
 const {
   isDevelopment,
@@ -15,11 +16,14 @@ const {
   sessionConfig,
   accessLogStream,
 } = require("@Config/helperVariables");
+const { default: PassportSetup } = require("@Services/passport");
 
 const errorMiddleware = require("@Middlewares/errors.middleware");
 const loggerMiddleware = require("@Middlewares/logger.middleware");
+const checkLoggedInMiddleware = require("@Middlewares/auth.middleware");
 
 const exampleRouter = require("@Routes/example/example.routes.js");
+const AuthRouter = require("@Routes/auth/auth.routes");
 
 const app = express();
 
@@ -39,9 +43,14 @@ app.use(cors(corsOptions));
 app.use(expressCspHeader(cspOptions));
 
 app.use(session(sessionConfig));
-
+app.use(passport.initialize());
+app.use(passport.session());
 // A middleware to capture logs from controllers and direct them to Winston
 app.use(loggerMiddleware);
+
+if (!isDevelopment) {
+  app.use("/graphql", checkLoggedInMiddleware);
+}
 
 // set main router for whole app
 const mainRouter = express.Router();
@@ -54,5 +63,6 @@ app.use(errorMiddleware);
 // define api routes here
 
 mainRouter.use("/example", exampleRouter);
+mainRouter.use("/auth", AuthRouter);
 
 module.exports = app;
