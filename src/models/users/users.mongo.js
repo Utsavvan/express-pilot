@@ -37,6 +37,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Users = mongoose.model("hubecom_billing_users", userSchema);
+const Users = mongoose.model("users", userSchema);
 
 module.exports = Users;

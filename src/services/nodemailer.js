@@ -48,6 +48,15 @@ const emailTemplates = {
         `;
     },
   },
+  otpVerification: {
+    subject: "Request for login",
+    from: "Login Verification",
+    html: (data) => {
+      return `
+        <p> Dear User,<p> \n</p>Your OTP for login is here <b>${data.OTP}</b></p>.
+        `;
+    },
+  },
 };
 
 const getMailTemplate = (key) => {
