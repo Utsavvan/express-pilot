@@ -130,10 +130,15 @@ async function verifyOtp(req, res, next) {
       });
 
       if (updatedData.success) {
-        return res.status(200).json({
-          success: true,
-          message: "OTP verified successfully",
-        });
+        passport.authenticate("local", {
+          failureRedirect: `${CLIENT_ENDPOINT}/unauthorized`,
+          session: true,
+        })(req, res, next);
+
+        // return res.status(200).json({
+        //   success: true,
+        //   message: "OTP verified successfully",
+        // });
       }
     } else {
       let newAttemptCount = data.otpAttempts + 1;
