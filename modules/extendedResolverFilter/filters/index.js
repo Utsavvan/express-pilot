@@ -6,22 +6,20 @@ function createCondition(key, value) {
     return value;
   }
 
-  if (typeof value === "string" || value instanceof Date) {
+  if (isDateString(value)) {
     const date = new Date(value);
 
-    if (!isNaN(date.getTime())) {
-      const nextDay = new Date(date);
-      nextDay.setDate(date.getDate() + 1);
+    const nextDay = new Date(date);
+    nextDay.setDate(date.getDate() + 1);
 
-      return {
-        $gte: date,
-        $lt: nextDay,
-      };
-    }
+    return {
+      $gte: date,
+      $lt: nextDay,
+    };
+  }
 
-    if (typeof value === "string") {
-      return { $regex: new RegExp(value, "i") };
-    }
+  if (typeof value === "string") {
+    return { $regex: new RegExp(value, "i") };
   }
 
   return value;
@@ -85,6 +83,14 @@ function applyDateRangeFilter(query, key, values) {
 
     query[key] = condition;
   });
+}
+
+function isDateString(inputString) {
+  const date = new Date(inputString);
+
+  return (
+    !isNaN(date.getTime()) && date.toISOString().slice(0, 10) === inputString
+  );
 }
 
 module.exports = {
