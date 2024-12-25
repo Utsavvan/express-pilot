@@ -15,6 +15,7 @@ const {
   corsOptions,
   sessionConfig,
   accessLogStream,
+  logger,
 } = require("@Config/helperVariables");
 const { default: PassportSetup } = require("@Services/passport");
 
