@@ -7,5 +7,31 @@
   </head>
   <body>
     Hello world
+    <br />
+    <a href="/api/auth/google/callback">Sign in with google</a>
+    <br />
+    <input type="text" placeholder="email" id="email" />
+    <br />
+    <input type="text" placeholder="otp" />
+
+    <button onclick="sendOTP(this)">Send OTP</button>
+    <button>Login OTP</button>
   </body>
+  <script>
+    async function sendOTP(e) {
+      debugger;
+      const email = document.getElementById("email").value;
+      const response = await fetch(
+        "http://localhost:3000/api/auth/request-otp",
+        {
+          method: "POST",
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const result = await response.json();
+
+      return result;
+    }
+  </script>
 </html>

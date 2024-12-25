@@ -35,7 +35,7 @@ const config = {
 
 let sessionConfig = {
   name: "SESS_NAME",
-  secret: process?.env?.COOKIE_KEY || "secret",
+  secret: config?.COOKIE_KEY_1 || "secret",
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
     sameSite: false,
@@ -79,6 +79,8 @@ const logger = winston.createLogger({
   ],
 });
 
+const CLIENT_ENDPOINT = "http://localhost:3000/";
+
 module.exports = {
   isDevelopment,
   corsOptions,
@@ -89,4 +91,5 @@ module.exports = {
   logger,
   accessLogStream,
   logFilePath,
+  CLIENT_ENDPOINT,
 };
