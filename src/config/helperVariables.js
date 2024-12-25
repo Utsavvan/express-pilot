@@ -7,6 +7,16 @@ const winston = require("winston");
 const { MONGO_URL } = require("@Services/mongo");
 const { SELF } = require("express-csp-header");
 
+const CLIENT_ENDPOINT =
+  process.env.NODE_ENV == "development"
+    ? process.env.CLIENT_LOCAL
+    : process.env.CLIENT_LIVE;
+
+const SERVER_ENDPOINT =
+  process.env.NODE_ENV == "development"
+    ? process.env.SERVER_LOCAL
+    : process.env.CLIENT_LIVE;
+
 const isDevelopment = process.env.NODE_ENV === "development";
 
 let corsOptions = {
@@ -24,7 +34,7 @@ let corsOptions = {
   origin: [
     "http://localhost:3000",
     "http://localhost:1234",
-    "https://studio.apollographql.com",
+    `${isDevelopment ? "https://studio.apollographql.com" : ""}`,
   ],
 };
 
@@ -79,8 +89,6 @@ const logger = winston.createLogger({
   ],
 });
 
-const CLIENT_ENDPOINT = "http://localhost:3000/";
-
 module.exports = {
   isDevelopment,
   corsOptions,
@@ -92,4 +100,5 @@ module.exports = {
   accessLogStream,
   logFilePath,
   CLIENT_ENDPOINT,
+  SERVER_ENDPOINT,
 };
